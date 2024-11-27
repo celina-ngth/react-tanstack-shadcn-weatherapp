@@ -4,19 +4,26 @@ import Layout from '@/Layout/Layout'
 import Dashboard from '@/Pages/Dashboard'
 import City from '@/Pages/City'
 import './App.css'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+const queryClient = new QueryClient()
 
 function App() {
 	return (
-		<BrowserRouter>
-			<ThemeProvider defaultTheme="dark">
-				<Layout>
-					<Routes>
-						<Route path="/" element={<Dashboard />} />
-						<Route path="/city/:city" element={<City />} />
-					</Routes>
-				</Layout>
-			</ThemeProvider>
-		</BrowserRouter>
+		<QueryClientProvider client={queryClient}>
+			<BrowserRouter>
+				<ThemeProvider defaultTheme="dark">
+					<Layout>
+						<Routes>
+							<Route path="/" element={<Dashboard />} />
+							<Route path="/city/:city" element={<City />} />
+						</Routes>
+					</Layout>
+				</ThemeProvider>
+			</BrowserRouter>
+			<ReactQueryDevtools initialIsOpen={false} />
+		</QueryClientProvider>
 	)
 }
 

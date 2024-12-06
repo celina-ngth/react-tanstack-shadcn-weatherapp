@@ -1,7 +1,13 @@
+import CurrentWeather from '@/components/CurrentWeather'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { useGeolocation } from '@/hooks/useGeolocation'
+import {
+	useForecastQuery,
+	useReverseGeocodeQuery,
+	useWeatherQuery,
+} from '@/hooks/useWeather'
 import { AlertCircle, RefreshCcw } from 'lucide-react'
 import React from 'react'
 
@@ -13,13 +19,17 @@ const Dashboard: React.FC = () => {
 		getLocation,
 	} = useGeolocation()
 
-	console.log({ coordinates })
+	const locationQuery = useReverseGeocodeQuery(coordinates)
+	const weatherQuery = useWeatherQuery(coordinates)
+	const forecastQuery = useForecastQuery(coordinates)
 
 	const handleRefresh = () => {
 		getLocation()
 
 		if (coordinates) {
-			// refresh
+			locationQuery.refetch()
+			weatherQuery.refetch()
+			forecastQuery.refetch()
 		}
 	}
 
@@ -31,21 +41,49 @@ const Dashboard: React.FC = () => {
 		return (
 			<Alert variant="destructive">
 				<AlertCircle className="h-4 w-4" />
-				<AlertTitle>Erreur de position</AlertTitle>
+				<AlertTitle>Position error</AlertTitle>
 				<AlertDescription>
 					<p>{locationError}</p>
-					<p>Veuillez autoriser le partage de position</p>
+					<p>Please share your location</p>
 
 					<Button
 						onClick={getLocation}
 						variant="outline"
 						className="w-fit mt-3"
 					>
-						Cliquez ici pour rééssayer
+						Clic here to try again
 					</Button>
 				</AlertDescription>
 			</Alert>
 		)
+	}
+
+	const locationName = locationQuery.data?.[0]
+
+	if (weatherQuery.error || forecastQuery.error) {
+		return (
+			<Alert variant="destructive">
+				<AlertCircle className="h-4 w-4" />
+				<AlertTitle>Error</AlertTitle>
+				<AlertDescription>
+					<p>{locationError}</p>
+					<p>Failed to fetch weather data, please try again.</p>
+
+					<Button
+						onClick={handleRefresh}
+						variant="outline"
+						className="w-fit mt-3"
+					>
+						<RefreshCcw />
+						Click here to try again
+					</Button>
+				</AlertDescription>
+			</Alert>
+		)
+	}
+
+	if (!weatherQuery.data || !forecastQuery.data) {
+		return <LoadingSkeleton />
 	}
 
 	return (
@@ -53,18 +91,31 @@ const Dashboard: React.FC = () => {
 			{/* Mes villes favorites */}
 
 			<div className="flex items-center justify-between">
-				<h1 className="text-xl font-bold tracking-tight">Ma localication</h1>
+				<h1 className="text-xl font-bold tracking-tight">My location</h1>
 				<Button
 					variant="outline"
 					size="icon"
 					onClick={handleRefresh}
-					// disabled={ }
+					disabled={weatherQuery.isFetching || forecastQuery.isFetching}
 				>
-					<RefreshCcw />
+					<RefreshCcw
+						className={`'h-4 w-4'${
+							weatherQuery.isFetching ? 'animate-spin' : ''
+						}`}
+					/>
 				</Button>
 			</div>
 
-			{/* Météo actuelle et à venir */}
+			<div>
+				{/* current weather */}
+				<CurrentWeather data={weatherQuery.data} locationName={locationName} />
+				{/* hourly temperature */}
+			</div>
+
+			<div>
+				{/* details */}
+				{/* forecast */}
+			</div>
 		</div>
 	)
 }

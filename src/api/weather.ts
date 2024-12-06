@@ -1,14 +1,15 @@
 import { API_CONFIG } from "./config"
 import { Coordinates, ForecastData, GeocodingResponse, WeatherData } from "./types"
 
+
 class WeatherAPI {
   private createUrl(endpoint: string, params: Record<string, string | number>) {
     const searchParams = new URLSearchParams({
-      appid: API_CONFIG.API_KEY,
-      ...params
+      ...params,
+      appid: API_CONFIG.API_KEY
     })
 
-    return `${endpoint}/${searchParams.toString()}`
+    return `${endpoint}?${searchParams.toString()}`
   }
 
   private async fetchData<T>(url: string): Promise<T> {
@@ -22,7 +23,7 @@ class WeatherAPI {
   }
 
   async getCurrentWeather({ lat, lon }: Coordinates): Promise<WeatherData> {
-    const url = this.createUrl(`${API_CONFIG.BASE_URL}/weather `, {
+    const url = this.createUrl(`${API_CONFIG.BASE_URL}/weather`, {
       lat: lat.toString(),
       lon: lon.toString(),
       units: API_CONFIG.DEFAULT_PARAMS.units
@@ -32,7 +33,7 @@ class WeatherAPI {
   }
 
   async getForecast({ lat, lon }: Coordinates): Promise<ForecastData> {
-    const url = this.createUrl(`${API_CONFIG.BASE_URL}/forecast `, {
+    const url = this.createUrl(`${API_CONFIG.BASE_URL}/forecast`, {
       lat: lat.toString(),
       lon: lon.toString(),
       units: API_CONFIG.DEFAULT_PARAMS.units
@@ -42,14 +43,22 @@ class WeatherAPI {
   }
 
   async reverseGeocode({ lat, lon }: Coordinates): Promise<GeocodingResponse[]> {
-    const url = this.createUrl(`${API_CONFIG.BASE_URL}/reverse `, {
+    const url = this.createUrl(`${API_CONFIG.GEO}/reverse`, {
       lat: lat.toString(),
       lon: lon.toString(),
-      limit: 1
-    })
-
-    return this.fetchData<GeocodingResponse[]>(url)
+      limit: "1",
+    });
+    return this.fetchData<GeocodingResponse[]>(url);
   }
+
+  async searchLocations(query: string): Promise<GeocodingResponse[]> {
+    const url = this.createUrl(`${API_CONFIG.GEO}/direct`, {
+      q: query,
+      limit: "5",
+    });
+    return this.fetchData<GeocodingResponse[]>(url);
+  }
+
 }
 
 export const weatherAPI = new WeatherAPI()

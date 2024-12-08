@@ -66,7 +66,6 @@ const Dashboard: React.FC = () => {
 				<AlertCircle className="h-4 w-4" />
 				<AlertTitle>Error</AlertTitle>
 				<AlertDescription>
-					<p>{locationError}</p>
 					<p>Failed to fetch weather data, please try again.</p>
 
 					<Button

@@ -22,19 +22,17 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
 
 	return (
 		<div>
-			<Card className="overflow-hidden">
+			<Card className="overflow-hidden h-full">
 				<CardContent className="p-6">
 					<div className="grid gap-6 md:grid-cols-2">
 						<div className="flex flex-col gap-4">
 							<div>
-								<div className="flex items-baseline">
-									<h2 className="text-2xl font-bold">{locationName?.name}</h2>
-									{locationName?.state && (
-										<span className="text-muted-foreground">
-											, {locationName.state}, {locationName.country}
-										</span>
-									)}
-								</div>
+								<h2 className="text-2xl font-bold">{locationName?.name}</h2>
+								{locationName?.state && (
+									<div className="text-muted-foreground">
+										{locationName.state}, {locationName.country}
+									</div>
+								)}
 							</div>
 
 							<div className="flex items-center gap-2">

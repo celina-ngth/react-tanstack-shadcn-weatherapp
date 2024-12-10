@@ -115,8 +115,6 @@ const Dashboard: React.FC = () => {
 
 			<div>
 				<WeatherDetails data={weatherQuery.data} />
-
-				{/* forecast */}
 			</div>
 		</div>
 	)

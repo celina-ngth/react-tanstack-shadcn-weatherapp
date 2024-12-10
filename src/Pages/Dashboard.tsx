@@ -3,6 +3,7 @@ import HourlyTemperature from '@/components/HourlyTemperature'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
+import WeatherDetails from '@/components/WeatherDetails'
 import { useGeolocation } from '@/hooks/useGeolocation'
 import {
 	useForecastQuery,
@@ -113,7 +114,8 @@ const Dashboard: React.FC = () => {
 			</div>
 
 			<div>
-				{/* details */}
+				<WeatherDetails data={weatherQuery.data} />
+
 				{/* forecast */}
 			</div>
 		</div>

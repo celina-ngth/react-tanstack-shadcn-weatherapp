@@ -44,7 +44,7 @@ export function useGeolocation() {
 				setLocationData(() => ({
 					coordinates: null,
 					isLoading: false,
-					error: `An error is occuring, please check CODE: ${error}`,
+					error: `An error is occuring, please check CODE: ${error.message}`,
 				})),
 			{
 				enableHighAccuracy: true,

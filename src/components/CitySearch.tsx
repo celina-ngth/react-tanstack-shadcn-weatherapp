@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { format } from 'date-fns'
 import {
 	Command,
 	CommandDialog,
@@ -8,11 +9,11 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
-} from './ui/command'
-import { Button } from './ui/button'
-import { Clock, Loader2, Search, X } from 'lucide-react'
-import { useLocationSearch } from '@/hooks/useWeather'
+} from '@/components/ui/command'
+import { Button } from '@/components/ui/button'
+import { Search, Loader2, Clock, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useLocationSearch } from '@/hooks/useWeather'
 import { useSearchHistory } from '@/hooks/useSearchHistory'
 
 const CitySearch: React.FC = () => {
@@ -34,6 +35,7 @@ const CitySearch: React.FC = () => {
 			name,
 			country,
 		})
+
 		setOpen(false)
 		setQuery('')
 		navigate(`city/${name}?lat=${lat}&lon=${lon}`)
@@ -63,7 +65,7 @@ const CitySearch: React.FC = () => {
 					/>
 
 					<CommandList>
-						{query.length >= 2 && !isLoading && (
+						{query.length > 2 && !isLoading && (
 							<CommandEmpty>No city found</CommandEmpty>
 						)}
 						<CommandGroup heading="Favorites cities">
@@ -104,6 +106,9 @@ const CitySearch: React.FC = () => {
 											<span className="text-sm text-muted-foreground">
 												, {item.country}
 											</span>
+											<span className="ml-auto text-xs text-muted-foreground">
+												{format(item.searchedAt, 'MMM d, h:mm a')}
+											</span>
 										</CommandItem>
 									))}
 								</CommandGroup>
@@ -120,7 +125,7 @@ const CitySearch: React.FC = () => {
 										</div>
 									)}
 
-									{locations.map((location, index) => (
+									{locations?.map((location, index) => (
 										<CommandItem
 											key={`${location.lat}-${location.lon}-${index}`}
 											value={`${location.lat}|${location.lon}|${location.name}|${location.country}`}

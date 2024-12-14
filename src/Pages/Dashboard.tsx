@@ -1,4 +1,5 @@
 import CurrentWeather from '@/components/CurrentWeather'
+import FavoritesCities from '@/components/FavoritesCities'
 import HourlyTemperature from '@/components/HourlyTemperature'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -89,7 +90,7 @@ const Dashboard: React.FC = () => {
 
 	return (
 		<div className="space-y-4">
-			{/* Mes villes favorites */}
+			<FavoritesCities />
 
 			<div className="flex items-center justify-between">
 				<h1 className="text-xl font-bold tracking-tight">My location</h1>

@@ -15,6 +15,7 @@ import { Search, Loader2, Clock, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useLocationSearch } from '@/hooks/useWeather'
 import { useSearchHistory } from '@/hooks/useSearchHistory'
+import { useFavorites } from '@/hooks/useFavorites'
 
 const CitySearch: React.FC = () => {
 	const [open, setOpen] = useState(false)
@@ -24,6 +25,7 @@ const CitySearch: React.FC = () => {
 
 	const { data: locations, isLoading } = useLocationSearch(query)
 	const { history, addToHistory, clearHistory } = useSearchHistory()
+	const { favorites } = useFavorites()
 
 	const handleSelect = (cityData: string) => {
 		const [lat, lon, name, country] = cityData.split('|')
@@ -68,9 +70,14 @@ const CitySearch: React.FC = () => {
 						{query.length > 2 && !isLoading && (
 							<CommandEmpty>No city found</CommandEmpty>
 						)}
-						<CommandGroup heading="Favorites cities">
-							<CommandItem></CommandItem>
-						</CommandGroup>
+
+						{favorites.length > 0 && (
+							<CommandGroup heading="Favorites cities">
+								{favorites.map((favorite) => (
+									<CommandItem>{favorite.name}</CommandItem>
+								))}
+							</CommandGroup>
+						)}
 
 						{history.length > 0 && (
 							<>

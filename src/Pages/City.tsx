@@ -7,6 +7,7 @@ import CurrentWeather from '@/components/CurrentWeather'
 import HourlyTemperature from '@/components/HourlyTemperature'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
 import WeatherDetails from '@/components/WeatherDetails'
+import FavoriteButton from '@/components/FavoriteButton'
 
 const City: React.FC = () => {
 	const [searchParams] = useSearchParams()
@@ -42,6 +43,11 @@ const City: React.FC = () => {
 					<h1 className="text-2xl font-bold tracking-tight">
 						{params.city}, {weatherQuery.data.sys.country}
 					</h1>
+					<div>
+						<FavoriteButton
+							data={{ ...weatherQuery.data, name: params.city }}
+						/>
+					</div>
 				</div>
 
 				<div className="flex flex-col gap-4">

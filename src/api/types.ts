@@ -31,7 +31,7 @@ export interface WeatherData {
     gust: number
   },
   sys: {
-    country: number
+    country: string
     sunrise: number
     sunset: number
   },

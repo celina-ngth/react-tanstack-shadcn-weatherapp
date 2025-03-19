@@ -22,7 +22,7 @@ const queryClient = new QueryClient({
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<BrowserRouter>
+			<BrowserRouter basename={process.env.PUBLIC_URL}>
 				<ThemeProvider defaultTheme="dark">
 					<Layout>
 						<Routes>

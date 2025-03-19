@@ -74,7 +74,7 @@ const CitySearch: React.FC = () => {
 						{favorites.length > 0 && (
 							<CommandGroup heading="Favorites cities">
 								{favorites.map((favorite) => (
-									<CommandItem>{favorite.name}</CommandItem>
+									<CommandItem key={favorite.id}>{favorite.name}</CommandItem>
 								))}
 							</CommandGroup>
 						)}
